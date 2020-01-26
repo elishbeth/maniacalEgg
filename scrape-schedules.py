@@ -17,11 +17,11 @@ while(course != None):
     for child in course.children:
         if (isinstance(child, bs4.element.NavigableString)):
             a=1
-        elif(child.find("a")):
-             child.select('a[href]')
+        elif(child.a):
+            print(child.a.get('href'))
              #href = child.find(href)
-             print("******")
-             print(child.text.strip())
+            print("******")
+            print(child.text.strip())
             # print(child)
 
         else:
