@@ -16,18 +16,17 @@ while(course != None):
 
     for child in course.children:
         if (isinstance(child, bs4.element.NavigableString)):
-            print(child)
+            a=1
         elif(child.find("a")):
-             #soup.select_one('a[href]')
+             child.select('a[href]')
              #href = child.find(href)
              print("******")
              print(child.text.strip())
-             print(child)
+            # print(child)
 
         else:
             print(child.text.strip())
-            print("ELSE")
     course = course.find_next("tr")
-    
+
 
 print(firstname)
