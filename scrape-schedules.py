@@ -8,21 +8,25 @@ page = requests.get(url)
 soup = bs4.BeautifulSoup(page.content,'lxml')
 
 
-something = soup.find("tr")
-firstname = something.name
+course = soup.find("tr")
+firstname = course.name
 
 
-while(something != None):
+while(course != None):
 
-    for child in something.children:
+    for child in course.children:
         if (isinstance(child, bs4.element.NavigableString)):
             print(child)
-        elif(child.text == Details):
-             href = child.find(href)
+        elif(child.text.strip() == "Details"):
+             #soup.select_one('a[href]')
+             #href = child.find(href)
              print("******")
+             print(child.text.strip())
+             print(child)
 
         else:
-            print(child.text)
-    something = something.find_next("tr")
+            print(child.text.strip())
+            print("ELSE")
+    course = course.find_next("tr")
 
 print(firstname)
