@@ -2,6 +2,7 @@
 import requests
 import bs4
 import re
+import csv
 
 url = "https://www.macalester.edu/registrar/schedules/2020spring/class-schedule/"
 page = requests.get(url)
@@ -9,7 +10,7 @@ soup = bs4.BeautifulSoup(page.content,'lxml')
 
 
 course = soup.find("tr")
-classList = []
+list_dict = []
 
 
 while(course != None):
@@ -17,19 +18,19 @@ while(course != None):
 
     for child in course.children:
         if (number == 0):
-            category = "number"
+            category = "Number"
         if (number == 1):
-            category = "name"
+            category = "Name"
         if (number == 2):
-            category = "days"
+            category = "Days"
         if (number == 3):
-            category = "time"
+            category = "Time"
         if (number == 4):
-            category = "room"
+            category = "Room"
         if (number == 5):
-            category = "instructor"
+            category = "Instructor"
         if (number == 6):
-            category = "available"
+            category = "Available"
 
         if (isinstance(child, bs4.element.NavigableString)):
             pass
@@ -45,7 +46,14 @@ while(course != None):
             classDict[category] = child.text.strip()
             number += 1
 
-    classList.append(classDict)
+    list_dict.append(classDict)
     course = course.find_next("tr")
 
-print(classList)
+keys = list_dict[1].keys()
+
+classes_csv = open("classes.csv", "w")
+
+dict_writer = csv.DictWriter(classes_csv, keys)
+dict_writer.writeheader()
+dict_writer.writerows(list_dict)
+classes_csv.close()
