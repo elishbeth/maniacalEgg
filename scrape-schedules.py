@@ -9,13 +9,11 @@ soup = bs4.BeautifulSoup(page.content,'lxml')
 
 
 course = soup.find("tr")
-firstname = course.name
+classList = []
 
 
 while(course != None):
     number = 0
-
-    classDict = {}
 
     for child in course.children:
         if (number == 0):
@@ -41,12 +39,13 @@ while(course != None):
             #print("---what this", child.text.replace("Details", "").strip())
             classDict["notes"] = child.text.replace("Details", "").strip()
         else:
+            if(number == 0 ):
+                classDict = {}
             #print(")))))who this",number," ",child.text.strip())
             classDict[category] = child.text.strip()
             number += 1
-    print(classDict)
-    print("\n\n")
+
+    classList.append(classDict)
     course = course.find_next("tr")
 
-
-#print(firstname)
+print(classList)
