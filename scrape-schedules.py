@@ -11,7 +11,6 @@ soup = bs4.BeautifulSoup(page.content,'lxml')
 course = soup.find("tr")
 list_dict = []
 
-
 while(course != None):
     number = 0
 
@@ -45,7 +44,13 @@ while(course != None):
 
     course = course.find_next("tr")
 
+
 keys = list_dict[1].keys()
+
+link= "https://webapps.macalester.edu/registrardata/classdata/spring2020/30040"
+newPage = requests.get(link)
+miniSoup = bs4.BeautifulSoup(newPage.content,'lxml')
+print(miniSoup.get_text())
 
 classes_csv = open("classes.csv", "w")
 
