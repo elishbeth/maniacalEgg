@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import requests
 import bs4
-import re
 import csv
 
 url = "https://www.macalester.edu/registrar/schedules/2020spring/class-schedule/"
@@ -35,18 +34,15 @@ while(course != None):
         if (isinstance(child, bs4.element.NavigableString)):
             pass
         elif(child.a):
-            #print("*link", child.a.get('href'))
-            classDict["link"] = child.a.get('href')
-            #print("---what this", child.text.replace("Details", "").strip())
-            classDict["notes"] = child.text.replace("Details", "").strip()
+            classDict["Link"] = child.a.get('href')
+            classDict["Notes"] = child.text.replace("Details", "").strip()
+            list_dict.append(classDict)
         else:
-            if(number == 0 ):
+            if(number == 0):
                 classDict = {}
-            #print(")))))who this",number," ",child.text.strip())
             classDict[category] = child.text.strip()
             number += 1
 
-    list_dict.append(classDict)
     course = course.find_next("tr")
 
 keys = list_dict[1].keys()
