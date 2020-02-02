@@ -12,7 +12,6 @@ soup = bs4.BeautifulSoup(page.content,'lxml')
 course = soup.find("tr")
 list_dict = []
 
-
 while(course != None):
     number = 0
 
@@ -35,21 +34,27 @@ while(course != None):
         if (isinstance(child, bs4.element.NavigableString)):
             pass
         elif(child.a):
-            #print("*link", child.a.get('href'))
-            classDict["link"] = child.a.get('href')
-            #print("---what this", child.text.replace("Details", "").strip())
+            link = child.a.get('href')
+            print(link)
+
+            #classDict["link"] = child.a.get('href')
             classDict["notes"] = child.text.replace("Details", "").strip()
         else:
             if(number == 0 ):
                 classDict = {}
-            #print(")))))who this",number," ",child.text.strip())
             classDict[category] = child.text.strip()
             number += 1
 
     list_dict.append(classDict)
     course = course.find_next("tr")
 
+
 keys = list_dict[1].keys()
+
+link= "https://webapps.macalester.edu/registrardata/classdata/spring2020/30040"
+newPage = requests.get(link)
+miniSoup = bs4.BeautifulSoup(newPage.content,'lxml')
+print(miniSoup.get_text())
 
 classes_csv = open("classes.csv", "w")
 
