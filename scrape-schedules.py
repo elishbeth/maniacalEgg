@@ -3,6 +3,36 @@ import requests
 import bs4
 import csv
 
+def getDetails(url):
+    page = requests.get(url,verify = False)
+    #response = requests.get(url, verify=False
+    GeneralEd = ""
+    DistReq = ""
+    courseMaterials = ""
+    soup = bs4.BeautifulSoup(page.content,'lxml')
+
+    allText = soup.get_text().strip()
+    splitText = allText.split(":")
+    if(len(splitText) >= 2):
+        GeneralEd = splitText[1].strip("Distribution Requirements")
+    GeneralEdList = GeneralEd.split("\n")
+    while("" in GeneralEdList) :
+        GeneralEdList.remove("")
+
+    if(len(splitText) >= 3):
+        DistReq = splitText[2].strip("Course Materials")
+    DistReqList = DistReq.split("\n")
+    while("" in DistReqList) :
+        DistReqList.remove("")
+    if(not isinstance(soup.a, type(None))):
+        courseMaterials = soup.a.get('href')
+
+    courseDesc = splitText[0].strip("General Education Requirements").strip()
+
+    detailsList = [courseDesc,GeneralEdList,DistReqList,courseMaterials]
+
+    return(detailsList)
+
 url = "https://www.macalester.edu/registrar/schedules/2020spring/class-schedule/"
 page = requests.get(url)
 soup = bs4.BeautifulSoup(page.content,'lxml')
@@ -30,10 +60,17 @@ while(course != None):
         if (number == 6):
             category = "Available"
 
+
         if (isinstance(child, bs4.element.NavigableString)):
             pass
         elif(child.a):
-            classDict["Link"] = child.a.get('href')
+            url = child.a.get('href')
+            detailsList = getDetails(url)
+            if(len(detailsList) != 0):
+                classDict["Description"] = detailsList[0]
+                classDict["General Ed"] = detailsList[1]
+                classDict["Distribution Req"] = detailsList[2]
+                classDict["Course Materials"] = detailsList[3]
             classDict["Notes"] = child.text.replace("Details", "").strip()
             list_dict.append(classDict)
         else:
@@ -44,13 +81,8 @@ while(course != None):
 
     course = course.find_next("tr")
 
-
 keys = list_dict[1].keys()
 
-link= "https://webapps.macalester.edu/registrardata/classdata/spring2020/30040"
-newPage = requests.get(link)
-miniSoup = bs4.BeautifulSoup(newPage.content,'lxml')
-print(miniSoup.get_text())
 
 classes_csv = open("classes.csv", "w")
 
