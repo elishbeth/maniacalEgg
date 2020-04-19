@@ -2,8 +2,7 @@ import csv
 
 
 def reformatTime(time):
-    # print("ayaa")
-    # print(time[7:9])
+    """converts the time format from the csv to a 2 element array of start-time and end-time in 24hr double format"""
     if not len(time) == 23:
         return("[]")
     Shour = int(time[6:8])
@@ -26,6 +25,7 @@ def reformatTime(time):
 
 
 def reformatAvailable(avail):
+    """converts the availability format from the csv to a 2 element array of available-seats and max-size"""
     avail = avail[13:]
     available = ""
     maximum = ""
@@ -41,7 +41,6 @@ with open('classesFall.csv') as csvfile:
     out = '{\n'
     iternum = 0
     for row in readCSV:
-        # print(iternum)
         if(iternum > 0):
             out += '\t"' + row[0] + '"' + ": {\n"
             out += '\t\t"Title" : "' + row[1] + '",\n'
@@ -49,21 +48,16 @@ with open('classesFall.csv') as csvfile:
             out += '\t\t"Time" : ' + reformatTime(row[3]) + ',\n'
             out += '\t\t"Room" : "' + row[4][6:] + '",\n'
             out += '\t\t"Instructor" : "' + row[5][12:] + '",\n'
-            # print(reformatAvailable(row[6]))
             out += '\t\t"Availability" : ' + reformatAvailable(row[6]) + ',\n'
             out += '\t\t"Description" : "' + row[7] + '",\n'
-            out += '\t\t"General Ed" : ' + row[8] + ',\n'
-            out += '\t\t"Distribution Req" : "' + row[9][1:-1] + '",\n'
-            out += '\t\t"Course Materials" : "' + row[10] + '",\n'
-            out += '\t\t"Notes" : "' + row[11] + '"\n'
+            out += '\t\t"GeneralEd" : ' + row[8] + ',\n'
+            out += '\t\t"DistributionReq" : "' + row[9][1:-1] + '",\n'
+            out += '\t\t"CourseMaterials" : "' + row[10] + '",\n'
+            out += '\t\t"Notes" : "' + row[11] + '",\n'
             out += "\t},\n"
         iternum += 1
-    out += '}'
+    out += '};'
 
 file1 = open("jv.txt", "w")
 file1.write(out)
 file1.close()
-# print(out)
-
-# reformatTime("Time: 02:20 pm-03:20 pm")
-# reformatAvailable("Avail./Max.: 4 / 8")
