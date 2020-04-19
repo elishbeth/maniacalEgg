@@ -43,7 +43,7 @@ def getDetails(url):
 
 
 
-url = "https://www.macalester.edu/registrar/schedules/2020spring/class-schedule/"
+url = "https://www.macalester.edu/registrar/schedules/2020fall/class-schedule/"
 page = requests.get(url)
 soup = bs4.BeautifulSoup(page.content,'lxml')
 
@@ -94,7 +94,7 @@ while(course != None):
 keys = list_dict[1].keys()
 
 
-classes_csv = open("classes.csv", "w")
+classes_csv = open("fall2020_classes.csv", "w")
 
 dict_writer = csv.DictWriter(classes_csv, keys)
 dict_writer.writeheader()
