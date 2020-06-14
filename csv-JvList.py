@@ -36,6 +36,16 @@ def reformatAvailable(avail):
     return("[" + available + "," + maximum + "]")
 
 
+def cleanUpText(text):
+    out = ""
+    for i in text:
+        if i in ['"', "'"]:
+            out += "\\"
+        out += i
+    return out
+
+
+
 with open('classesFall.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
     out = '{\n'
@@ -49,7 +59,7 @@ with open('classesFall.csv') as csvfile:
             out += '\t\t"Room" : "' + row[4][6:] + '",\n'
             out += '\t\t"Instructor" : "' + row[5][12:] + '",\n'
             out += '\t\t"Availability" : ' + reformatAvailable(row[6]) + ',\n'
-            out += '\t\t"Description" : "' + row[7] + '",\n'
+            out += '\t\t"Description" : "' + cleanUpText(row[7]) + '",\n'
             out += '\t\t"GeneralEd" : ' + row[8] + ',\n'
             out += '\t\t"DistributionReq" : "' + row[9][1:-1] + '",\n'
             out += '\t\t"CourseMaterials" : "' + row[10] + '",\n'
@@ -58,6 +68,6 @@ with open('classesFall.csv') as csvfile:
         iternum += 1
     out += '};'
 
-file1 = open("jv.txt", "w")
+file1 = open("jv2.txt", "w")
 file1.write(out)
 file1.close()
